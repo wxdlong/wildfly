@@ -1,0 +1,26 @@
+env:
+  global:
+    - DOCKER_USER="wxdlong"
+    - IMAGE="wildfly:17"
+
+
+
+services:
+  - docker
+
+
+before_install:
+  - echo "before install"
+  - ls -lth 
+
+install:
+  - echo "install"
+  - docker build -t ${DOCKER_USER}/${IMAGE} .
+
+script:
+  - echo "$DOCKER_PWD" | docker login -u "${DOCKER_USER}" --password-stdin
+  - docker images
+  - docker push ${DOCKER_USER}/${IMAGE}
+
+after_success:
+  - echo "after_success"
