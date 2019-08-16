@@ -1,4 +1,4 @@
-## How to connect remote Wildfly
+## How to connect remote Wildfly https://ycat.top/post/wildfly/
 
 1. run wildfly docker container.
 
