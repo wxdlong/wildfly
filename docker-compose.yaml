@@ -1,0 +1,12 @@
+version: "3"
+services:
+    wildfly:
+      build: .
+      container_name: wildflys
+      hostname: wildflys
+      privileged: true
+      working_dir: /home
+      ports:
+        - "9990:9990"
+        - "9999:9999"
+        - "8080:8080"

@@ -1,5 +1,4 @@
 FROM wxdlong/jdk:8u201 as jdk
-FROM wxdlong/wildfly:17.0.0 as wildfly
 
 FROM centos:7
 
@@ -10,17 +9,16 @@ RUN yum clean all; \
     yum install -y vim iproute ping tar wget
 
 COPY --from=jdk /* /tmp/
-COPY --from=wildfly /* /tmp/
 
 
 ENV JAVA_HOME /opt/jdk1.8.0_201
-ENV WILDFLY_HOME /opt/wildfly-17.0.0.Final/
+ENV WILDFLY_HOME /opt/wildfly-20.0.0.Final/
 
 
 ## Default userName=wxdlong, password=12345678
 
-RUN tar -xvf /tmp/jdk-8u201-linux-x64.tar.gz -C /opt && \
-    tar -xvf /tmp/wildfly-17.0.0.Final.tar.gz -C /opt && \
+RUN curl -SL https://download.jboss.org/wildfly/20.0.0.Final/wildfly-20.0.0.Final.tar.gz |  tar -xz  -C /opt/  && \
+    tar -xvf /tmp/jdk-8u201-linux-x64.tar.gz -C /opt && \
     echo "export JAVA_HOME=${JAVA_HOME}" >> /etc/profile && \
     echo "export WILDFLY_HOME=${WILDFLY_HOME}" >> /etc/profile && \
     echo 'export PATH=${WILDFLY_HOME}/bin:${JAVA_HOME}/bin:${PATH}' >> /etc/profile && \
@@ -31,5 +29,5 @@ RUN tar -xvf /tmp/jdk-8u201-linux-x64.tar.gz -C /opt && \
 COPY init.sh /usr/local/sbin
     
 EXPOSE 9990 9999 8080
-WORKDIR /opt/${WILDFLY_HOME}
+WORKDIR ${WILDFLY_HOME}
 CMD ["init.sh"]
